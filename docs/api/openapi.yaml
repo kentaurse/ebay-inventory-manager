@@ -1,0 +1,78 @@
+openapi: 3.0.0
+info:
+  title: eBay Manager API
+  version: 1.0.0
+  description: API documentation for eBay Manager application
+
+servers:
+  - url: https://api.ebaymanager.com/v1
+    description: Production server
+  - url: https://staging-api.ebaymanager.com/v1
+    description: Staging server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        ebayItemId:
+          type: string
+        title:
+          type: string
+        currentPrice:
+          type: number
+        quantity:
+          type: integer
+        lastUpdated:
+          type: string
+          format: date-time
+
+paths:
+  /items:
+    get:
+      summary: Get all items
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Items per page
+      responses:
+        '200':
+          description: List of items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+
+    post:
+      summary: Create new item
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        '201':
+          description: Item created successfully 
