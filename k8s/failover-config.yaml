@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: failover-config
+data:
+  database:
+    primary:
+      host: db-primary
+      port: 5432
+    standby:
+      host: db-standby
+      port: 5432
+    switchover:
+      timeout: 30
+      retries: 3
+  
+  monitoring:
+    healthcheck:
+      interval: 10
+      timeout: 5
+      failures: 3
+    
+  recovery:
+    automatic: true
+    maxAttempts: 3
+    backoffPeriod: 300 

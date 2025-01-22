@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  NODE_ENV: "production"
+  DB_HOST: "postgres"
+  REDIS_HOST: "redis"
+  API_URL: "http://api"
+  EBAY_API_ENV: "production" 

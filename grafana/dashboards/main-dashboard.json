@@ -1,0 +1,53 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "eBay Manager Dashboard",
+    "tags": ["ebay-manager"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "HTTP Request Rate",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[5m])",
+            "legendFormat": "{{method}} {{path}}"
+          }
+        ]
+      },
+      {
+        "title": "Response Time",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m])",
+            "legendFormat": "{{method}} {{path}}"
+          }
+        ]
+      },
+      {
+        "title": "Active Connections",
+        "type": "gauge",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "active_connections"
+          }
+        ]
+      },
+      {
+        "title": "Memory Usage",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "memory_usage_bytes",
+            "legendFormat": "Memory Usage"
+          }
+        ]
+      }
+    ]
+  }
+} 

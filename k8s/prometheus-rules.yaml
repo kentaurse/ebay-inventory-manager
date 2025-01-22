@@ -1,0 +1,40 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ebay-manager-alerts
+spec:
+  groups:
+    - name: ebay-manager
+      rules:
+        - alert: HighErrorRate
+          expr: |
+            rate(http_requests_total{status=~"5.."}[5m]) 
+            / 
+            rate(http_requests_total[5m]) > 0.05
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: High error rate detected
+            description: Error rate is above 5% for the last 5 minutes
+
+        - alert: SlowResponses
+          expr: |
+            rate(http_request_duration_seconds_sum[5m]) 
+            / 
+            rate(http_request_duration_seconds_count[5m]) > 1
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Slow response times detected
+            description: Average response time is above 1 second
+
+        - alert: LowStockWarning
+          expr: stock_levels < 5
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Low stock level detected
+            description: Stock level is below 5 units 

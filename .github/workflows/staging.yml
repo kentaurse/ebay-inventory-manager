@@ -1,0 +1,27 @@
+name: Staging Deployment
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build and Deploy to Staging
+      run: |
+        # ステージング環境用の設定を適用
+        kubectl config use-context staging
+        
+        # 環境変数の設定
+        kubectl create configmap app-config \
+          --from-literal=NODE_ENV=staging \
+          --from-literal=API_URL=https://api.staging.example.com \
+          -n ebay-manager-staging \
+          --dry-run=client -o yaml | kubectl apply -f -
+          
+        # デプロイメント
+        kubectl apply -f k8s/staging/ 
